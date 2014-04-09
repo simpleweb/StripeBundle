@@ -22,6 +22,8 @@ class SimplewebStripeExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        \Stripe::setApiKey($config['secret_key']);
+        foreach ($config as $key => $value) {
+            $container->setParameter($this->getAlias() . '.' . $key, $value);
+        }
     }
 }
