@@ -33,7 +33,7 @@ class WebhookListener implements EventSubscriberInterface
 
     public function onChargeFailed(StripeEvent $event)
     {
-        $charge = $event->getData();
+        $charge = $event->getSubject();
 
         $user = $this->findUserByStripeCustomerId($charge->card->customer);
 
@@ -44,7 +44,7 @@ class WebhookListener implements EventSubscriberInterface
 
     public function onInvoicePaymentFailed(StripeEvent $event)
     {
-        $invoice = $event->getData();
+        $invoice = $event->getSubject();
 
         $user = $this->findUserByStripeCustomerId($invoice->customer);
 

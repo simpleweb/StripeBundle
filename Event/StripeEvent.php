@@ -8,16 +8,16 @@ class StripeEvent extends Event
 {
     protected $event;
 
-    protected $data;
+    protected $subject;
 
     /**
      * @param \Stripe_Event $event
-     * @param \Stripe_Object|null $data
+     * @param \Stripe_Object|null $subject
      */
-    public function __construct(\Stripe_Event $event, \Stripe_Object $data = null)
+    public function __construct(\Stripe_Event $event, \Stripe_Object $subject = null)
     {
         $this->event = $event;
-        $this->data = $data;
+        $this->subject = $subject;
     }
 
     /**
@@ -29,10 +29,10 @@ class StripeEvent extends Event
     }
 
     /**
-     * @return \Stripe_Object|null $data
+     * @return \Stripe_Object|null $subject
      */
-    public function getData()
+    public function getSubject()
     {
-        return $this->data;
+        return $this->subject;
     }
 }
