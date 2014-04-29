@@ -1,0 +1,7 @@
+services:
+    simpleweb.stripe.webhook_listener:
+        class: Simpleweb\StripeBundle\EventListener\WebhookListener
+        tags:
+            - { name: kernel.event_subscriber }
+        arguments:
+            - @fos_user.user_manager

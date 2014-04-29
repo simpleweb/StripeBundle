@@ -16,6 +16,15 @@ Installation
 
 All the installation instructions are located in the documentation.
 
+Configuration
+-------------
+
+```yaml
+# app/config/routing.yml
+simpleweb_stripe:
+    resource: "@SimplewebStripeBundle/Resources/config/routing.yml"
+```
+
 License
 -------
 
