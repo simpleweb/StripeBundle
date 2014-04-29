@@ -1,3 +1,4 @@
 simpleweb_stripe_webhook_event:
-    pattern:   /stripe/webhook
-    defaults:  { _controller: SimplewebStripeBundle:Webhook:event }
+    pattern: /stripe/webhook
+    defaults: { _controller: SimplewebStripeBundle:Webhook:event }
+    methods: [POST]
