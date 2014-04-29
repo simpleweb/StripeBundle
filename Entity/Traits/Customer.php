@@ -75,6 +75,20 @@ trait Customer
     }
 
     /**
+     * @return \DateTime
+     */
+    public function getCardExpiresAt()
+    {
+        if ($this->getCardExpiryMonth() && $this->getCardExpiryYear()) {
+            return new \DateTime(sprintf(
+                '%d-%d last day of this month 11:59:59',
+                $this->getCardExpiryYear(),
+                $this->getCardExpiryMonth()
+            ));
+        }
+    }
+
+    /**
      * @return integer
      */
     public function getCardExpiryMonth()
@@ -113,7 +127,6 @@ trait Customer
 
         return $this;
     }
-
 
     /**
      * @return boolean
