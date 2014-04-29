@@ -4,6 +4,7 @@ namespace Simpleweb\StripeBundle\Controller;
 
 use Simpleweb\StripeBundle\Event\StripeEvent,
     Symfony\Component\DependencyInjection\ContainerAware,
+    Symfony\Component\HttpKernel\Exception\BadRequestHttpException,
     Symfony\Component\HttpFoundation\Response;
 
 class WebhookController extends ContainerAware
@@ -15,17 +16,20 @@ class WebhookController extends ContainerAware
         $content = json_decode($request->getContent());
 
         if ($content) {
-            $event = $content->type;
-            $data = $content->data->object;
-
-            if ($event && $data) {
-                $dispatcher = $this->container->get('event_dispatcher');
-                $dispatcher->dispatch(sprintf('simpleweb_stripe.%s', $event), new StripeEvent($data));
-            } else {
-                throw new \Exception('The request body did not contain an event and associated data object.');
+            try {
+                $event = \Stripe_Event::retrieve($content->id);
+            } catch (\Stripe_Error $e) {
+                throw new BadRequestHttpException;
             }
+
+            $dispatcher = $this->container->get('event_dispatcher');
+
+            $dispatcher->dispatch(
+                sprintf('simpleweb_stripe.%s', $event->type),
+                new StripeEvent($event, $event->data->object)
+            );
         } else {
-            throw new \Exception('The request body could not be parsed.');
+            throw new BadRequestHttpException;
         }
 
         return new Response(null, 200);
