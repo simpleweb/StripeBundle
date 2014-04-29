@@ -4,7 +4,7 @@ namespace Simpleweb\StripeBundle\EventListener;
 
 use FOS\UserBundle\Model\UserInterface,
     FOS\UserBundle\Model\UserManagerInterface,
-    Simpleweb\StripeBundle\Event\StripeEvent,
+    Simpleweb\StripeBundle\Entity\StripeEvent,
     Simpleweb\StripeBundle\StripeEvents,
     Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -27,7 +27,7 @@ class WebhookListener implements EventSubscriberInterface
     {
         return array(
             StripeEvents::CHARGE_FAILED          => 'onChargeFailed',
-            StripeEvents::INVOICE_PAYMENT_FAILED => 'onInvoicePaymentFailed'
+            StripeEvents::INVOICE_CREATED => 'onInvoicePaymentFailed'
         );
     }
 
