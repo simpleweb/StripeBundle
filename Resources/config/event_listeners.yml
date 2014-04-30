@@ -1,6 +1,34 @@
 services:
-    simpleweb.stripe.event_listeners.webhook_listener:
-        class: Simpleweb\StripeBundle\EventListener\WebhookListener
+    simpleweb.stripe.event_listeners.card_delete_listener:
+        class: Simpleweb\StripeBundle\EventListener\CardDeleteListener
+        tags:
+            - { name: kernel.event_subscriber }
+        arguments:
+            - @fos_user.user_manager
+
+    simpleweb.stripe.event_listeners.card_update_listener:
+        class: Simpleweb\StripeBundle\EventListener\CardUpdateListener
+        tags:
+            - { name: kernel.event_subscriber }
+        arguments:
+            - @fos_user.user_manager
+
+    simpleweb.stripe.event_listeners.customer_delete_listener:
+        class: Simpleweb\StripeBundle\EventListener\CustomerDeleteListener
+        tags:
+            - { name: kernel.event_subscriber }
+        arguments:
+            - @fos_user.user_manager
+
+    simpleweb.stripe.event_listeners.customer_update_listener:
+        class: Simpleweb\StripeBundle\EventListener\CustomerUpdateListener
+        tags:
+            - { name: kernel.event_subscriber }
+        arguments:
+            - @fos_user.user_manager
+
+    simpleweb.stripe.event_listeners.invoice_payment_fail_listener:
+        class: Simpleweb\StripeBundle\EventListener\InvoicePaymentFailListener
         tags:
             - { name: kernel.event_subscriber }
         arguments:

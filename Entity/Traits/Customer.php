@@ -5,24 +5,29 @@ namespace Simpleweb\StripeBundle\Entity\Traits;
 trait Customer
 {
     /**
+     * @ORM\Column(nullable = true)
+     */
+    protected $stripe_card_id;
+
+    /**
      * @ORM\Column(length = 4, nullable = true)
      */
-    protected $card_last4;
+    protected $stripe_card_last4;
 
     /**
      * @ORM\Column(length = 20, nullable = true)
      */
-    protected $card_type;
+    protected $stripe_card_type;
 
     /**
      * @ORM\Column(type = "integer", nullable = true)
      */
-    protected $card_exp_month;
+    protected $stripe_card_exp_month;
 
     /**
      * @ORM\Column(type = "integer", nullable = true)
      */
-    protected $card_exp_year;
+    protected $stripe_card_exp_year;
 
     /**
      * @ORM\Column(type = "boolean")
@@ -35,21 +40,42 @@ trait Customer
     protected $stripe_customer_id;
 
     /**
-     * @return string
-     */
-    public function getCardLast4()
-    {
-        return $this->card_last4;
-    }
-
-    /**
-     * @param string $card_last4
+     * Update the User based on a \Stripe_Card
+     *
+     * NB: activates/deactivates the customer
+     *
+     * @param \Stripe_Card|null $card
      *
      * @return FOS\UserBundle\Model\UserInterface
      */
-    public function setCardLast4($card_last4)
+    public function setStripeCard(\Stripe_Card $card = null)
     {
-        $this->card_last4 = $card_last4;
+        return $this
+            ->setStripeCardId($card ? $card->id : null)
+            ->setStripeCardLast4($card ? $card->last4 : null)
+            ->setStripeCardType($card ? $card->type : null)
+            ->setStripeCardExpiryMonth($card ? $card->exp_month : null)
+            ->setStripeCardExpiryYear($card ? $card->exp_year : null)
+            ->setStripeCustomerActive(!!$card)
+        ;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStripeCardId()
+    {
+        return $this->stripe_card_id;
+    }
+
+    /**
+     * @param string $stripe_card_id
+     *
+     * @return FOS\UserBundle\Model\UserInterface
+     */
+    public function setStripeCardId($stripe_card_id)
+    {
+        $this->stripe_card_id = $stripe_card_id;
 
         return $this;
     }
@@ -57,19 +83,39 @@ trait Customer
     /**
      * @return string
      */
-    public function getCardType()
+    public function getStripeCardLast4()
     {
-        return $this->card_type;
+        return $this->stripe_card_last4;
     }
 
     /**
-     * @param string $card_type
+     * @param string $stripe_card_last4
      *
      * @return FOS\UserBundle\Model\UserInterface
      */
-    public function setCardType($card_type)
+    public function setStripeCardLast4($stripe_card_last4)
     {
-        $this->card_type = $card_type;
+        $this->stripe_card_last4 = $stripe_card_last4;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStripeCardType()
+    {
+        return $this->stripe_card_type;
+    }
+
+    /**
+     * @param string $stripe_card_type
+     *
+     * @return FOS\UserBundle\Model\UserInterface
+     */
+    public function setStripeCardType($stripe_card_type)
+    {
+        $this->stripe_card_type = $stripe_card_type;
 
         return $this;
     }
@@ -77,13 +123,13 @@ trait Customer
     /**
      * @return \DateTime
      */
-    public function getCardExpiresAt()
+    public function getStripeCardExpiresAt()
     {
-        if ($this->getCardExpiryMonth() && $this->getCardExpiryYear()) {
+        if ($this->getStripeCardExpiryMonth() && $this->getStripeCardExpiryYear()) {
             return new \DateTime(sprintf(
                 '%d-%d last day of this month 11:59:59',
-                $this->getCardExpiryYear(),
-                $this->getCardExpiryMonth()
+                $this->getStripeCardExpiryYear(),
+                $this->getStripeCardExpiryMonth()
             ));
         }
     }
@@ -91,19 +137,19 @@ trait Customer
     /**
      * @return integer
      */
-    public function getCardExpiryMonth()
+    public function getStripeCardExpiryMonth()
     {
-        return $this->card_exp_month;
+        return $this->stripe_card_exp_month;
     }
 
     /**
-     * @param integer $card_exp_month
+     * @param integer $stripe_card_exp_month
      *
      * @return FOS\UserBundle\Model\UserInterface
      */
-    public function setCardExpiryMonth($card_exp_month)
+    public function setStripeCardExpiryMonth($stripe_card_exp_month)
     {
-        $this->card_exp_month = $card_exp_month;
+        $this->stripe_card_exp_month = $stripe_card_exp_month;
 
         return $this;
     }
@@ -111,21 +157,39 @@ trait Customer
     /**
      * @return integer
      */
-    public function getCardExpiryYear()
+    public function getStripeCardExpiryYear()
     {
-        return $this->card_exp_year;
+        return $this->stripe_card_exp_year;
     }
 
     /**
-     * @param integer $card_exp_year
+     * @param integer $stripe_card_exp_year
      *
      * @return FOS\UserBundle\Model\UserInterface
      */
-    public function setCardExpiryYear($card_exp_year)
+    public function setStripeCardExpiryYear($stripe_card_exp_year)
     {
-        $this->card_exp_year = $card_exp_year;
+        $this->stripe_card_exp_year = $stripe_card_exp_year;
 
         return $this;
+    }
+
+    /**
+     * Update the User based on a \Stripe_Customer
+     *
+     * NB: deactivates the customer if null is passed
+     *
+     * @param \Stripe_Customer|null $customer
+     *
+     * @return FOS\UserBundle\Model\UserInterface
+     */
+    public function setStripeCustomer(\Stripe_Customer $customer = null)
+    {
+        return $this
+            ->setStripeCustomerActive($customer ? $this->isStripeCustomerActive() : false)
+            ->setStripeCustomerId($customer ? $customer->id : null)
+            ->setStripeCard($customer ? $customer->cards->retrieve($customer->default_card) : null)
+        ;
     }
 
     /**
