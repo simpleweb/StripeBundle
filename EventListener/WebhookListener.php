@@ -27,7 +27,7 @@ class WebhookListener implements EventSubscriberInterface
     {
         return array(
             StripeEvents::CHARGE_FAILED          => 'onChargeFailed',
-            StripeEvents::INVOICE_CREATED => 'onInvoicePaymentFailed'
+            StripeEvents::INVOICE_PAYMENT_FAILED => 'onInvoicePaymentFailed'
         );
     }
 
