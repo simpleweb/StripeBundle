@@ -57,3 +57,25 @@ simpleweb_stripe:
     secret_key: %stripe_test_secret_key%
     publishable_key: %stripe_test_publishable_key%
 ```
+
+### Step 4: Add our traits and entity listener to your User class
+
+``` php
+<?php
+// src/Acme/UserBundle/Entity/User.php
+
+namespace Acme\UserBundle\Entity;
+
+use FOS\UserBundle\Model\User as BaseUser,
+    Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\EntityListeners({"Simpleweb\StripeBundle\EntityListener\UserListener"})
+ * @ORM\Table(name="fos_user")
+ */
+class User extends BaseUser
+{
+    use Simpleweb\SaaSBundle\Entity\Traits\Customer;
+}
+```

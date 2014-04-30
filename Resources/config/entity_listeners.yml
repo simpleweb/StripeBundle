@@ -1,0 +1,5 @@
+services:
+    simpleweb.stripe.entity_listeners.user_listener:
+        class: Simpleweb\StripeBundle\EntityListener\UserListener
+        tags:
+            - { name: doctrine.orm.entity_listener }

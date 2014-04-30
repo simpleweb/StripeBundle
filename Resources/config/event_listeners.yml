@@ -1,5 +1,5 @@
 services:
-    simpleweb.stripe.webhook_listener:
+    simpleweb.stripe.event_listeners.webhook_listener:
         class: Simpleweb\StripeBundle\EventListener\WebhookListener
         tags:
             - { name: kernel.event_subscriber }
