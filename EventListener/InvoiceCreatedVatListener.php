@@ -31,7 +31,7 @@ class InvoiceCreatedVatListener extends AbstractStripeListener
             'amount'       => $vat_amount,
             'currency'     => $subscription->getCurrency()->getCode(),
             'invoice'      => $invoice->id,
-            'description'  => "VAT Total @ ${vat_rate}%",
+            'description'  => "VAT Total (at ${vat_rate}%)",
             'metadata'     => [
                 'vat_rate' => $vat_rate
             ]
