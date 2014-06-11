@@ -33,3 +33,10 @@ services:
             - { name: kernel.event_subscriber }
         arguments:
             - @fos_user.user_manager
+
+    simpleweb.stripe.event_listeners.invoice_created_vat_listener:
+        class: Simpleweb\StripeBundle\EventListener\InvoiceCreatedVatListener
+        tags:
+            - { name: kernel.event_subscriber }
+        arguments:
+            - @fos_user.user_manager
